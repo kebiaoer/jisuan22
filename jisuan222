@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简易计算器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        .calculator {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .calculator input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 18px;
+            text-align: right;
+        }
+        .calculator button {
+            width: 23%;
+            margin: 1%;
+            padding: 15px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #007BFF;
+            color: white;
+        }
+        .calculator button:active {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>计算器</h1>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+        <br>
+        <button onclick="appendValue('7')">7</button>
+        <button onclick="appendValue('8')">8</button>
+        <button onclick="appendValue('9')">9</button>
+        <button onclick="operate('/')">÷</button>
+        <br>
+        <button onclick="appendValue('4')">4</button>
+        <button onclick="appendValue('5')">5</button>
+        <button onclick="appendValue('6')">6</button>
+        <button onclick="operate('*')">×</button>
+        <br>
+        <button onclick="appendValue('1')">1</button>
+        <button onclick="appendValue('2')">2</button>
+        <button onclick="appendValue('3')">3</button>
+        <button onclick="operate('-')">−</button>
+        <br>
+        <button onclick="appendValue('0')">0</button>
+        <button onclick="appendValue('.')">.</button>
+        <button onclick="calculate()">=</button>
+        <button onclick="operate('+')">+</button>
+        <br>
+        <button onclick="clearDisplay()" style="width: 48%;">清除</button>
+    </div>
+
+    <script>
+        let currentInput = '';
+        let operator = null;
+        let previousValue = null;
+
+        function appendValue(value) {
+            currentInput += value;
+            updateDisplay(currentInput);
+        }
+
+        function operate(op) {
+            if (currentInput === '') return;
+            if (previousValue !== null && operator !== null) {
+                calculate();
+            }
+            operator = op;
+            previousValue = parseFloat(currentInput);
+            currentInput = '';
+        }
+
+        function calculate() {
+            if (operator === null || currentInput === '') return;
+            const currentValue = parseFloat(currentInput);
+            let result;
+            switch (operator) {
+                case '+':
+                    result = previousValue + currentValue;
+                    break;
+                case '-':
+                    result = previousValue - currentValue;
+                    break;
+                case '*':
+                    result = previousValue * currentValue;
+                    break;
+                case '/':
+                    result = currentValue !== 0 ? previousValue / currentValue : '错误';
+                    break;
+            }
+            updateDisplay(result);
+            previousValue = result;
+            currentInput = '';
+            operator = null;
+        }
+
+        function clearDisplay() {
+            currentInput = '';
+            previousValue = null;
+            operator = null;
+            updateDisplay('');
+        }
+
+        function updateDisplay(value) {
+            document.getElementById('display').value = value;
+        }
+    </script>
+</body>
+</html>
